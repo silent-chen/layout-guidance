@@ -174,14 +174,19 @@
   <div class="container is-max-desktop">
 
     <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
         <h2 class="title is-3">Demo</h2>
-<!--          <iframe src="http://127.0.0.1:7860" height=900 width=100%></iframe>-->
-    <gradio-app src="https://322d07dfbb2218dc2e.gradio.live"></gradio-app>
+        <div class="content has-text-justified">
+        <gradio-app src="https://322d07dfbb2218dc2e.gradio.live"></gradio-app>
+        </div>
+      </div>
     </div>
     <!--/ Abstract. -->
 
   </div>
 </section>
+
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -189,7 +194,7 @@
     <div class="columns is-centered">
       <div class="column is-full-width has-text-centered">
 
-        <h2 class="title is-5">Oveview</h2>
+        <h2 class="title is-3">Oveview</h2>
         <div class="content has-text-justified">
           <p>
             We provide two different guidance, forward and backward, for layout control. Forward guidance combine the original cross-attention map with an additional inject attention as the layout guidance. On the other hand, backward guidance compute the loss between the cross-attention and bounding box following by back-propagation updating the latent variable directly.
@@ -200,7 +205,7 @@
         </div>
         <br>
 
-        <h2 class="title is-5">Examples under VISOR</h2>
+        <h2 class="title is-3">Examples under VISOR</h2>
         <div class="content has-text-justified">
           <p>
             The model achieve to generate images with correct spatial relationship under VISOR protocol. Some examples are from <span><a href="https://visort2i.github.io/">here</a>.
@@ -213,7 +218,7 @@
         <br>
 
 
-        <h2 class="title is-5">Real Image Editing</h2>
+        <h2 class="title is-3">Real Image Editing</h2>
         <div class="content has-text-justified">
           <p>
             We achieve real image editing based on Dreambooth and Text Inversion. Specifically, we can change the context, location and size of the objects in the original image.
