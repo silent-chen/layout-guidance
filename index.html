@@ -195,7 +195,7 @@
         <h2 class="title is-3">Overview</h2>
         <div class="content has-text-justified">
           <p>
-            We provide two different guidance, forward and backward, for layout control. Forward guidance combine the original cross-attention map with an additional inject attention as the layout guidance. On the other hand, backward guidance compute the loss between the cross-attention and bounding box following by back-propagation updating the latent variable directly.
+            We present two types of guidance for controlling the image layout -- forward and backward. In forward guidance, we use a smooth windowing function to bias the original cross-attention map of a specific token towards a user-specified region (such as a bounding box), to "force" the generated image to conform to the desired layout. Backward guidance involves calculating a loss between the cross-attention and bounding box to evaluate whether the attention map follows the desired pattern and updates the latent using back-propagation to guide the attention to focus on a specific region.
           </p>
         </div>
         <div class="content has-text-centered">
@@ -206,7 +206,7 @@
         <h2 class="title is-3">Comparison to Text-to-Image Generation Methods</h2>
         <div class="content has-text-justified">
           <p>
-            The model achieve to generate images with correct spatial relationship under VISOR protocol. Some examples are from <span><a href="https://visort2i.github.io/">here</a>.
+            Our method, built on top of Stable Diffusion, achieves image generation with correct spatial relationships. Some examples are from <span><a href="https://visort2i.github.io/">here</a>.
  </span>
           </p>
         </div>
