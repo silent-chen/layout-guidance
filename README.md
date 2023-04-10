@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 We provide an example inference script. The example outputs, including log file, generated images, config file,  are saved to the specified path `./example_output`.  Detail configuration can be found in the `./conf/base_config.yaml` and `inference.py`.
 ```buildoutcfg
-python inference.py genenral.save_path=./example_output 
+python inference.py general.save_path=./example_output 
 ```
 
 ## Examples
