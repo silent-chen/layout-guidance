@@ -1,7 +1,7 @@
 # Training-Free Layout Control with Cross-Attention Guidance
 [Minghao Chen](https://silent-chen.github.io), [Iro Laina](), [Andrea Vedaldi](https://www.robots.ox.ac.uk/~vedaldi/)
 
-[[Paper](https://arxiv.org/abs/2304.03373)] [[Project Page](https://silent-chen.github.io/layout-guidance/)] [[Demo]()]
+[[Paper](https://arxiv.org/abs/2304.03373)] [[Project Page](https://silent-chen.github.io/layout-guidance/)] [[Demo](https://huggingface.co/spaces/silentchen/layout-guidance)]
 
 https://user-images.githubusercontent.com/30588507/229642269-57527ded-3189-4aa2-9590-1f3de4d51cad.mp4
 
