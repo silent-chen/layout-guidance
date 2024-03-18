@@ -27,10 +27,7 @@ from torchvision import transforms
 from tqdm.auto import tqdm
 from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 from utils import setup_logger, load_text_inversion
-def save_progress(text_encoder, placeholder_tokpython dreambooth.py \
-    dreambooth.text_inversion_path=./example_output/real_image_editing/text_inversion/learned_embeds_iteration_500.bin \
-    dreambooth.class_prompt='a photo of a cat' \
-    dreambooth.instance_prompt="a photo of a <sks>"en_id, accelerator, iteration_idx, cfg, logger):
+def save_progress(text_encoder, placeholder_token_id, accelerator, iteration_idx, cfg, logger):
     logger.info("Saving embeddings to {}".format(os.path.join(cfg.general.save_path, "learned_embeds_iteration_{}.bin")))
     learned_embeds = accelerator.unwrap_model(text_encoder).get_input_embeddings().weight[placeholder_token_id]
     learned_embeds_dict = {cfg.text_inversion.placeholder_token: learned_embeds.detach().cpu()}
