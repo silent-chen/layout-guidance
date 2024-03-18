@@ -65,6 +65,7 @@ python inference.py \
     real_image_editing.text_inversion_path=./example_output/real_image_editing/text_inversion/learned_embeds_iteration_500.bin
 ```
 
+Here are some example outputs of real image editing.
 
 <div align="center">
     <img width="90%" alt="teaser" src="https://github.com/silent-chen/layout-guidance/blob/gh-page/resources/real_image_editing.png?raw=true"/>
