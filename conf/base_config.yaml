@@ -3,6 +3,7 @@ general:
   save_path:  './example_output'
   model_path: 'runwayml/stable-diffusion-v1-5'
   unet_config: './conf/unet/config.json'
+  real_image_editing: False
 
 inference:
   loss_scale: 30
@@ -19,3 +20,8 @@ noise_schedule:
   beta_end: 0.012
   beta_schedule: "scaled_linear"
   num_train_timesteps: 1000
+
+real_image_editing:
+  dreambooth_path: ''
+  text_inversion_path: ''
+  placeholder_token: '<sks>'

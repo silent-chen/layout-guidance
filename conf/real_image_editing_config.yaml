@@ -1,0 +1,73 @@
+general:
+  save_path:  './example_output/real_image_editing'
+  model_path: 'runwayml/stable-diffusion-v1-5'
+  unet_config: './conf/unet/config.json'
+  seed: 0
+
+text_inversion:
+  use_ema: True
+  batch_size: 4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay: 1e-2
+  adam_epsilon: 1e-08
+  lr_scheduler: constant
+  lr_warmup_steps: 0
+  max_train_steps: 500
+  text_finetune_step: 50
+  unet_finetune_step: 50
+  alpha: 0.1
+  min_lr: 1e-6
+  warmup_epochs: 0
+  num_train_epochs: 100
+  gradient_accumulation_steps: 1
+  lr: 5.0e-04
+  placeholder_token: <sks>
+  initial_token: pet
+  scale_lr: True
+  resolution: 512
+  repeats: 100
+  learnable_property: 'object'
+  center_crop: False
+  unet_pretrain: 'runwayml/stable-diffusion-v1-5'
+  save_steps: 50
+  randaug: False
+  image_path: './example_input/text_inversion/cat/'
+  inference: False
+  embedding_ckp: ''
+  example_prompt: 'a photo of a {}'
+  new_prompt: ''
+  inference_batch_size: 4
+
+dreambooth:
+  with_prior_preservation: True
+  class_data_dir: './dreambooth_class_preservation_dir/cat'
+  num_class_images: 300
+  pretrained_model_name_or_path: 'runwayml/stable-diffusion-v1-5'
+  class_prompt: 'a photo of a cat'
+  scale_lr: True
+  lr: 1e-6
+  gradient_accumulation_steps: 1
+  train_batch_size: 1
+  train_text_encoder: True
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay: 1e-2
+  adam_epsilon: 1e-08
+  instance_data_dir: './example_input/text_inversion/cat/'
+  instance_prompt: 'a photo of a <sks>'
+  resolution: 512
+  center_crop: False
+  max_train_steps: 150
+  num_train_epochs: 1000
+  lr_scheduler: 'constant'
+  lr_warmup_steps: 0
+  max_grad_norm: 1.0
+  prior_loss_weight: 1.0
+  sample_batch_size: 4
+  inference: False
+  text_inversion_path: ''
+  example_prompt: 'a photo of a {}'
+  new_prompt: ''
+  inference_batch_size: 4
+  ckp_path: ''

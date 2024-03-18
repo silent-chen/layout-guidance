@@ -9,7 +9,7 @@ from utils import compute_ca_loss, Pharse2idx, draw_box, setup_logger
 import hydra
 import os
 from tqdm import tqdm
-
+from utils import load_text_inversion
 def inference(device, unet, vae, tokenizer, text_encoder, prompt, bboxes, phrases, cfg, logger):
 
 
@@ -19,7 +19,7 @@ def inference(device, unet, vae, tokenizer, text_encoder, prompt, bboxes, phrase
 
     # Get Object Positions
 
-    logger.info("Conver Phrases to Object Positions")
+    logger.info("Convert Phrases to Object Positions")
     object_positions = Pharse2idx(prompt, phrases)
 
     # Encode Classifier Embeddings
@@ -39,15 +39,15 @@ def inference(device, unet, vae, tokenizer, text_encoder, prompt, bboxes, phrase
 
     cond_embeddings = text_encoder(input_ids.input_ids.to(device))[0]
     text_embeddings = torch.cat([uncond_embeddings, cond_embeddings])
-    generator = torch.manual_seed(cfg.inference.rand_seed)  # Seed generator to create the inital latent noise
+    generator = torch.manual_seed(cfg.inference.rand_seed)  # Seed generator to create the initial latent noise
+
+    noise_scheduler = LMSDiscreteScheduler(beta_start=cfg.noise_schedule.beta_start, beta_end=cfg.noise_schedule.beta_end,
+                                           beta_schedule=cfg.noise_schedule.beta_schedule, num_train_timesteps=cfg.noise_schedule.num_train_timesteps)
 
     latents = torch.randn(
         (cfg.inference.batch_size, 4, 64, 64),
         generator=generator,
     ).to(device)
-
-    noise_scheduler = LMSDiscreteScheduler(beta_start=cfg.noise_schedule.beta_start, beta_end=cfg.noise_schedule.beta_end,
-                                           beta_schedule=cfg.noise_schedule.beta_schedule, num_train_timesteps=cfg.noise_schedule.num_train_timesteps)
 
     noise_scheduler.set_timesteps(cfg.inference.timesteps)
 
@@ -113,6 +113,11 @@ def main(cfg):
     text_encoder = CLIPTextModel.from_pretrained(cfg.general.model_path, subfolder="text_encoder")
     vae = AutoencoderKL.from_pretrained(cfg.general.model_path, subfolder="vae")
 
+    if cfg.general.real_image_editing:
+        text_encoder, tokenizer = load_text_inversion(text_encoder, tokenizer, cfg.real_image_editing.placeholder_token, cfg.real_image_editing.text_inversion_path)
+        unet.load_state_dict(torch.load(cfg.real_image_editing.dreambooth_path)['unet'])
+        text_encoder.load_state_dict(torch.load(cfg.real_image_editing.dreambooth_path)['encoder'])
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     unet.to(device)
@@ -127,6 +132,14 @@ def main(cfg):
                 "bboxes": [[[0.1, 0.2, 0.5, 0.8]], [[0.75, 0.6, 0.95, 0.8]]],
                 'save_path': cfg.general.save_path
                 }
+
+    # ------------------ real image editing example input ------------------
+    if cfg.general.real_image_editing:
+        examples = {"prompt": "A {} is standing on grass.".format(cfg.real_image_editing.placeholder_token),
+                    "phrases": "{}".format(cfg.real_image_editing.placeholder_token),
+                    "bboxes": [[[0.4, 0.2, 0.9, 0.9]]],
+                    'save_path': cfg.general.save_path
+                    }
     # ---------------------------------------------------
     # Prepare the save path
     if not os.path.exists(cfg.general.save_path):

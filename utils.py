@@ -3,6 +3,8 @@ import math
 from PIL import Image, ImageDraw, ImageFont
 import logging
 import os
+
+
 def compute_ca_loss(attn_maps_mid, attn_maps_up, bboxes, object_positions):
     loss = 0
     object_number = len(bboxes)
@@ -101,3 +103,22 @@ def setup_logger(save_path, logger_name):
     logger.addHandler(file_handler)
 
     return logger
+
+def load_text_inversion(text_encoder, tokenizer, placeholder_token, embedding_ckp_path):
+    num_added_tokens = tokenizer.add_tokens(placeholder_token)
+    if num_added_tokens == 0:
+        raise ValueError(
+            f"The tokenizer already contains the token {placeholder_token}. Please pass a different"
+            " `placeholder_token` that is not already in the tokenizer."
+        )
+
+    placeholder_token_id = tokenizer.convert_tokens_to_ids(placeholder_token)
+
+    # Resize the token embeddings as we are adding new special tokens to the tokenizer
+    text_encoder.resize_token_embeddings(len(tokenizer))
+
+    # Initialise the newly added placeholder token with the embeddings of the initializer token
+    token_embeds = text_encoder.get_input_embeddings().weight.data
+    learned_embedding = torch.load(embedding_ckp_path)
+    token_embeds[placeholder_token_id] = learned_embedding[placeholder_token]
+    return text_encoder, tokenizer

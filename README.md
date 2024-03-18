@@ -33,10 +33,39 @@ We provide an example inference script. The example outputs, including log file,
 python inference.py general.save_path=./example_output 
 ```
 
-## Examples
+## Applications
 
-### Real Image Editting
+### Real Image Editing
+
 We achieve real image editing based on Dreambooth and Text Inversion. Specifically, we can change the context, location and size of the objects in the original image.
+
+
+There are 3 steps to achieve real image editing based on layout guidance.  Please check the config file in `./conf/real_image_editing.yaml` for more detailed configuration.
+
+Step 1: Use text inversion to generate a special token that describes the desired object.
+```buildoutcfg
+python text_inversion.py \
+    general.save_path=./example_output/real_image_editing \
+    text_inversion.image_path=./example_input/text_inversion/cat/ \
+    text_inversion.initial_token='pet'
+```
+Step 2: Use Dreambooth to finetune the U-Net and text-encoder.
+
+```buildoutcfg
+python dreambooth.py dreambooth.text_inversion_path=./example_output/real_image_editing/text_inversion/learned_embeds_iteration_500.bin
+```
+
+Step 3: Perform layout guidance on the fine-tuned text encoder and U-Net.
+
+```buildoutcfg
+python inference.py \
+    general.save_path=./example_output/real_image_editing/ \
+    general.real_image_editing=True \
+    real_image_editing.dreambooth_path=./example_output/real_image_editing/dreambooth/dreambooth_150.ckp \
+    real_image_editing.text_inversion_path=./example_output/real_image_editing/text_inversion/learned_embeds_iteration_500.bin
+```
+
+
 <div align="center">
     <img width="90%" alt="teaser" src="https://github.com/silent-chen/layout-guidance/blob/gh-page/resources/real_image_editing.png?raw=true"/>
 </div>
@@ -61,7 +90,7 @@ If this repo is helpful for you, please consider to cite it. Thank you! :)
 - [x] Basic Backward Guidance
 - [ ] Support Different Layer of Backward Guidance
 - [ ] Forward Guidance
-- [ ] Real Image Editting Example
+- [x] Real Image Editting Example
 
 ## Acknowledgements
 
